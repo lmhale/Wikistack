@@ -1,5 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
+const {db, Page, User} = require('./models');
+
 const app = express();
 
 app.use(morgan("dev"));
@@ -12,6 +14,15 @@ app.get("/", function (req, res, next) {
   res.send("hello world");
 });
 
-app.listen("3000", function () {
-  console.log("App listening on port 3000");
-});
+async function initialize() {
+  await Page.sync()
+  
+  await User.sync()
+
+  app.listen("3000", function () {
+    console.log("App listening on port 3000");
+  });
+  
+}
+
+initialize()
